@@ -15,7 +15,7 @@ const Pagination = ({ totalPages, currentPage, isLoading, handlePrevPage, handle
             ) : (
                 <p className='custom-pagination-text'>Page {currentPage} of {totalPages}</p>
             )}
-        <button className='custom-pagination-button' onClick={handleNextPage} disabled={isLoading}>
+        <button className='custom-pagination-button' onClick={handleNextPage} disabled={currentPage === totalPages || isLoading}>
             <ArrowForwardIosIcon />
         </button>
     </div>

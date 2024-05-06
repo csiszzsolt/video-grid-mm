@@ -16,21 +16,25 @@ const useVideos = (sortingCriteria, searchQuery, currentPage, perPage) => {
             'z-a': '&sort=alphabetical&direction=desc'
         };
 
-        let url = `${fetchBaseUrl}/users/${userId}/albums/${albumId}/videos?per_page=${perPage}`;
+        let url = `${fetchBaseUrl}/users/${userId}/albums/${albumId}/videos`;
 
         if (searchQuery) {
-            url += `&query=${encodeURIComponent(searchQuery)}`;
+            url += `?query=${encodeURIComponent(searchQuery)}`;
         } else {
-            url += `&page=${currentPage}`;
+            url += `?page=${currentPage}&per_page=${perPage}`;
         }
 
         url += sortingParams[sortingCriteria];
+
+        console.log(url);
 
         const response = await axios.get(url, {
             headers: {
                 'Authorization': `Bearer ${bearer_token}`
             }
         });
+
+        console.log(response.data);
 
         return response.data;
     };
@@ -40,7 +44,16 @@ const useVideos = (sortingCriteria, searchQuery, currentPage, perPage) => {
         queryFn: fetchVideos
     });
 
-    return { videosData, isLoading, isError };
+    // console.log(videosData);
+
+    let totalPages = 0;
+
+    if (videosData) {
+        totalPages = Math.ceil(videosData.total / videosData.per_page);
+    }
+
+
+    return { videosData, isLoading, isError, totalPages };
 };
 
 export default useVideos;

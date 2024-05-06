@@ -13,20 +13,20 @@ const VideoGrid = () => {
     const [sortingCriteria, setSortingCriteria] = useState('latest');
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const { videosData, isLoading, isError } = useVideos(sortingCriteria, searchQuery, currentPage, perPage);
+    const { videosData, isLoading, isError, totalPages } = useVideos(sortingCriteria, searchQuery, currentPage, perPage);
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
 
     const videos = videosData?.data || [];
-    
-    const totalPages = Math.ceil(videosData?.total / perPage);
 
     const handleSortingChange = (event) => {
         setSortingCriteria(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
+        setCurrentPage(1);
     };
 
     const handleVideoClick = (video) => {
@@ -56,7 +56,7 @@ const VideoGrid = () => {
 
             <div className="video-card-row">
                 {isLoading ? (
-                    <LoadingComponent count={8} />
+                    <LoadingComponent count={perPage} />
                 ) : isError ? (
                     <div>Error fetching data</div>
                 ) : (
@@ -68,17 +68,13 @@ const VideoGrid = () => {
 
             <VideoModal video={selectedVideo} open={isModalOpen} onModalClose={() => setModalOpen(false)} />
         
-            {searchQuery ? (
-                <p className='custom-search-results-message'>Search results for "{searchQuery}"</p>
-            ) : (
-                <Pagination 
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    isLoading={isLoading}
-                    handlePrevPage={handlePrevPage}
-                    handleNextPage={handleNextPage} 
-                />
-            )}
+            <Pagination 
+                totalPages={totalPages}
+                currentPage={currentPage}
+                isLoading={isLoading}
+                handlePrevPage={handlePrevPage}
+                handleNextPage={handleNextPage} 
+            />
 
         </>
      );

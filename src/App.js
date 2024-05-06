@@ -1,4 +1,3 @@
-import './App.css';
 import VideoGrid from './components/VideoGrid';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
