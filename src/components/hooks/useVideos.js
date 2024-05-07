@@ -9,32 +9,27 @@ const useVideos = (sortingCriteria, searchQuery, currentPage, perPage) => {
     const fetchBaseUrl = 'https://api.vimeo.com';
 
     const fetchVideos = async () => {
-        const sortingParams = {
-            'latest': '&sort=date&direction=desc',
-            'oldest': '&sort=date&direction=asc',
-            'a-z': '&sort=alphabetical&direction=asc',
-            'z-a': '&sort=alphabetical&direction=desc'
-        };
 
-        let url = `${fetchBaseUrl}/users/${userId}/albums/${albumId}/videos`;
+        let url = `${fetchBaseUrl}/users/${userId}/albums/${albumId}/videos?fields=name,link,release_time,pictures,embed`;
 
-        if (searchQuery) {
-            url += `?query=${encodeURIComponent(searchQuery)}`;
-        } else {
-            url += `?page=${currentPage}&per_page=${perPage}`;
+        const params = {
+            per_page: perPage,
+            page: currentPage,
+            sort: sortingCriteria === 'latest' || sortingCriteria === 'oldest' ? 'date' : 'alphabetical',
+            direction: sortingCriteria === 'oldest' || sortingCriteria === 'a-z' ? 'asc' : 'desc',
         }
 
-        url += sortingParams[sortingCriteria];
-
-        console.log(url);
+        if (searchQuery) {
+            params.query = encodeURIComponent(searchQuery);
+            params.per_page = 100;
+        }
 
         const response = await axios.get(url, {
             headers: {
                 'Authorization': `Bearer ${bearer_token}`
-            }
+            },
+            params
         });
-
-        console.log(response.data);
 
         return response.data;
     };
@@ -44,14 +39,11 @@ const useVideos = (sortingCriteria, searchQuery, currentPage, perPage) => {
         queryFn: fetchVideos
     });
 
-    // console.log(videosData);
-
     let totalPages = 0;
 
     if (videosData) {
         totalPages = Math.ceil(videosData.total / videosData.per_page);
     }
-
 
     return { videosData, isLoading, isError, totalPages };
 };
