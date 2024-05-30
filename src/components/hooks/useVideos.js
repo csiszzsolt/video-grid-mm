@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const useVideos = (sortingCriteria, searchQuery, currentPage, perPage) => {
 
-    const userId = '30452144';
-    const albumId = '7669939';
-    const bearer_token = 'bf04e67ba612bc5df1e342fcdb4b117f';
+    const userId = '';
+    const albumId = '';
+    const bearerToken = '';
     const fetchBaseUrl = 'https://api.vimeo.com';
 
     const fetchVideos = async () => {
@@ -26,7 +26,7 @@ const useVideos = (sortingCriteria, searchQuery, currentPage, perPage) => {
 
         const response = await axios.get(url, {
             headers: {
-                'Authorization': `Bearer ${bearer_token}`
+                'Authorization': `Bearer ${bearerToken}`
             },
             params
         });

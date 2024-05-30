@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# Important note
+
+Before running the application make sure to update userId, albumId and bearerToken in useVideos.js custom hook.
+
 ## Available Scripts
 
 In the project directory, you can run:
